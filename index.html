@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        canvas{
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas"></canvas>
+
+	<table id='table'>
+		<thead>
+			<tr>	
+				<th> H1 </th>
+			 	<th> H2 </th>	
+			</tr>
+
+		</thead>
+		<tbody>
+			<tr>
+				<td>#1</td>
+				<td data-type='int'> 1 </td>
+			</tr>	
+
+
+			<tr>
+				<td>#2</td>
+				<td data-type='int'> 2 </td>
+			</tr>	
+	
+			<tr>
+				<td>#3</td>
+				<td data-type='int'> 3 </td>
+			</tr>
+
+				
+			<tr>
+				<td>#4</td>
+				<td data-type='int'> -10 </td>
+			</tr>
+
+		</tbody>
+
+	</table>
+
+	<table id='table2'>
+		<thead>
+			<tr>	
+				<th> H1 </th>
+			 	<th> H2 </th>	
+			</tr>
+
+		</thead>
+		<tbody>
+			<tr>
+				<td>#1</td>
+				<td data-type='int'> 1 </td>
+			</tr>	
+
+
+			<tr>
+				<td>#2</td>
+				<td data-type='int'> 2 </td>
+			</tr>	
+	
+			<tr>
+				<td>#3</td>
+				<td data-type='int'> 3 </td>
+			</tr>	
+H2
+		</tbody>
+
+	</table>
+
+
+
+    <script>
+
+			
+
+		let AutoSort = function(element) { 
+
+				if(element.tagName !== "TABLE") { 
+					console.error("Não é uma tabela caralho.");
+					return;
+				}
+
+
+				this.indexClicked = null;
+				
+				let table = element,
+					tbody = table.querySelector("tbody"),
+					thead = table.querySelector('thead > tr'), //assume que só vai ter um tr no thead.
+					rows = tbody.children.length,
+					headers = thead.children.length,
+					_this = this;
+
+				console.table({ 'linhas':rows,'colunas':headers  });
+					
+				for(let x =0; x < thead.children.length;x++){ 
+						thead.children[x].addEventListener('click',function(e){ 
+						let el = e.target,
+							dataset = el.dataset;
+						_this.indexClicked = el.cellIndex;	
+						//@todo adicionar tipo dos valores na th clicada.
+	
+						let ord = dataset.ord||'ASC';
+						if(!dataset.ord) {
+							el.setAttribute('data-ord','DESC');
+						}
+
+						if(ord === 'ASC'){ 
+							el.setAttribute('data-ord','DESC');	
+						}else{ 
+							el.setAttribute('data-ord','ASC');	
+						}
+
+
+						let vals = _this.getColumnValues();
+						_this.sortValues(vals,ord);
+						let fragment = _this.getFragment(vals);
+						tbody.appendChild( fragment  )
+					})
+				}
+
+
+				 this.getColumnValues = function() { 	
+					let rowLocations = [ ],
+						indexClicked = this.indexClicked;
+					console.log(indexClicked);
+					for(let l = 0; l < rows;l++){ 
+						let line = tbody.children[l],
+							cells = line.cells,
+							lenCells = cells.length;
+						let targetValue = cells.item(indexClicked),
+							cellValue = targetValue.innerHTML,
+							dataset = targetValue.dataset,
+							cellType = dataset.type||'string';
+						//@todo setar o tipo da ordenação no dataset
+						switch(cellType)	{ 
+							case 'int':
+								cellValue = parseInt(cellValue);
+								break;
+							default:
+								break;
+						}
+						rowLocations.push( { valor:cellValue,linha:line.rowIndex,element: line }  );	
+					}
+
+					return rowLocations;
+				}
+
+				this.sortValues = function(data,ord) { 
+			
+					let sortAlgo = function(a,b) { 
+						return a.valor < b.valor;
+					}						
+
+					if(ord === 'DESC'){ 
+						sortAlgo = function(a,b) { 
+							return a.valor > b.valor;
+						}
+					}
+					data.sort(sortAlgo);
+
+				}
+
+				this.getFragment = function(rowLocations) { 				
+					let frag = document.createDocumentFragment();
+						console.log(rowLocations);
+					for(let l = 0;l < rows;l++){ 
+						frag.appendChild(rowLocations[l].element);
+					}
+					return frag;
+				}			
+			
+		}
+
+		let table = document.querySelector("#table")
+		new AutoSort(table);
+		new AutoSort(document.querySelector("#table2"));
+
+
+
+
+
+
+/*            const canvas = document.getElementById('canvas');
+            const ctx  = canvas.getContext('2d');
+
+            let tilesetImage = new Image();
+            tilesetImage.onload = drawImageActualSize;
+            tilesetImage.src = '/tiles/Ground tileset/Earth-tileset.png';
+
+
+            function drawImageActualSize() {
+                // Use the intrinsic size of image in CSS pixels for the canvas element
+                canvas.width = this.naturalWidth;
+                canvas.height = this.naturalHeight;
+
+                // Will draw the image as 300x227, ignoring the custom size of 60x45
+                // given in the constructor
+                console.log(this)
+                //ctx.drawImage(this, 0, 0);
+
+                // To use the custom size we'll have to specify the scale parameters
+                // using the element's width and height properties - lets draw one
+                // on top in the corner:
+                console.log(this);
+                console.log("image width: "+ this.naturalWidth )
+                console.log("image height: "+ this.naturalHeight )
+                
+                ctx.drawImage(this, 0, 0, this.naturalWidth, this.naturalHeight);
+                }
+
+*/
+    </script>
+</body>
+</html>
