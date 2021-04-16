@@ -4,89 +4,105 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<script src="plugNsort.js"></script>
+    <script src="plugNsort.js"></script>
     <title>Document</title>
 
     <style>
-        canvas{
+        canvas {
         }
     </style>
 </head>
 <body>
 
-    <canvas id="canvas"></canvas>
+<canvas id="canvas"></canvas>
 
-	<table id='table'>
-		<thead>
-			<tr>	
-				<th> H1 </th>
-			 	<th> H2 </th>	
-			</tr>
+<table id='table'>
+    <thead>
+    <tr>
+        <th> H1</th>
+        <th data-type='int'> H2</th>
+        <th data-type='str'> H3</th>
 
-		</thead>
-		<tbody>
-			<tr>
-				<td>#1</td>
-				<td data-type='int'> 1 </td>
-			</tr>	
+    </tr>
 
-
-			<tr>
-				<td>#2</td>
-				<td data-type='int'> 2 </td>
-			</tr>	
-	
-			<tr>
-				<td>#3</td>
-				<td data-type='int'> 3 </td>
-			</tr>
-
-				
-			<tr>
-				<td>#4</td>
-				<td data-type='int'> -10 </td>
-			</tr>
-
-		</tbody>
-
-	</table>
-
-	<table id='table2'>
-		<thead>
-			<tr>	
-				<th> H1 </th>
-			 	<th> H2 </th>	
-			</tr>
-
-		</thead>
-		<tbody>
-			<tr>
-				<td>#1</td>
-				<td data-type='int'> 1 </td>
-			</tr>	
+    </thead>
+    <tbody>
+    <tr>
+        <td>#1</td>
+        <td> 1</td>
+        <td> A</td>
+    </tr>
 
 
-			<tr>
-				<td>#2</td>
-				<td data-type='int'> 2 </td>
-			</tr>	
-	
-			<tr>
-				<td>#3</td>
-				<td data-type='int'> 3 </td>
-			</tr>	
-H2
-		</tbody>
+    <tr>
+        <td>#2</td>
+        <td>2</td>
+        <td>B</td>
+    </tr>
 
-	</table>
+    <tr>
+        <td>#3</td>
+        <td>3</td>
+        <td>C</td>
+    </tr>
 
 
+    <tr>
+        <td>#4</td>
+        <td>-10</td>
+        <td>D</td>
+    </tr>
 
-    <script>
-		let table = document.querySelector("#table")
-		new plugNsort(table);
-		new plugNsort(document.querySelector("#table2"));
+    <tr>
+        <td> #5</td>
+        <td>100</td>
+        <td>É</td>
+    </tr>
 
-    </script>
+    <tr>
+        <td> #5</td>
+        <td>100</td>
+        <td>Á</td>
+    </tr>
+
+    </tbody>
+
+</table>
+
+<table id='table2'>
+    <thead>
+    <tr>
+        <th> H1</th>
+        <th data-type='int'> H2</th>
+    </tr>
+
+    </thead>
+    <tbody>
+    <tr>
+        <td>#1</td>
+        <td> 1</td>
+    </tr>
+
+
+    <tr>
+        <td>#2</td>
+        <td> 2</td>
+    </tr>
+
+    <tr>
+        <td>#3</td>
+        <td> 3</td>
+    </tr>
+    </tbody>
+
+</table>
+
+
+<script>
+    let table = document.querySelector("#table")
+    new plugNsort(table);
+    new plugNsort(document.querySelector("#table2"));
+
+</script>
 </body>
 </html>
