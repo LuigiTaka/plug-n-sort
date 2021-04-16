@@ -16,18 +16,18 @@ let plugNsort = function(element) {
         headers = thead.children.length,
         _this = this;
 
-    // console.table({ 'linhas':rows,'colunas':headers  });
-    let customHandler = function(e) {
+    let sortHandler = function(e) {
         e.stopImmediatePropagation();
         _this.sortTable(e)
     };
     for(let x =0; x < thead.children.length;x++){
-        thead.children[x].addEventListener('click',customHandler);
+        thead.children[x].addEventListener('click',sortHandler);
     }
 
     this.sortTable = function (e) {
         let el = e.target,
-            dataset = el.dataset;
+            dataset = el.dataset,
+            type = el.getAttribute('data-type');
         _this.indexClicked = el.cellIndex;
         //@todo adicionar tipo dos valores na th clicada.
 
@@ -44,15 +44,14 @@ let plugNsort = function(element) {
         }
 
 
-        let vals = _this.getColumnValues();
-
-        _this.sortValues(vals,ord);
+        let vals = _this.getColumnValues(type);
+        _this.sortValues(vals,ord,type);
         let fragment = _this.getFragment(vals);
         tbody.appendChild( fragment  )
     }
 
 
-    this.getColumnValues = function() {
+    this.getColumnValues = function(type) {
         let rowLocations = [ ],
             indexClicked = this.indexClicked;
         for(let l = 0; l < rows;l++){
@@ -61,10 +60,10 @@ let plugNsort = function(element) {
                 lenCells = cells.length;
             let targetValue = cells.item(indexClicked),
                 cellValue = targetValue.innerHTML,
-                dataset = targetValue.dataset,
-                cellType = dataset.type;
-            //@todo setar o tipo da ordenação no dataset
-            switch(cellType){
+                dataset = targetValue.dataset;
+
+            cellValue = cellValue.trim();
+            switch(type){
                 case 'int':
                     if (cellValue === _this.nullValue){
                         cellValue = null;
@@ -81,17 +80,30 @@ let plugNsort = function(element) {
         return rowLocations;
     }
 
-    this.sortValues = function(data,ord) {
-
-        let sortAlgo = function(a,b) {
-            return a.valor < b.valor;
-        }
-
-        if(ord === 'DESC'){
+    this.sortValues = function(data,ord,type) {
+        let sortAlgo = null;
+        if (type === 'int'){
             sortAlgo = function(a,b) {
-                return a.valor > b.valor;
+                return a.valor < b.valor;
+            }
+
+            if(ord === 'DESC'){
+                sortAlgo = function(a,b) {
+                    return a.valor > b.valor;
+                }
+            }
+        }else if(type === 'str'){
+            sortAlgo = function (a,b){
+                return a.valor.localeCompare(b.valor);
+            }
+
+            if (ord === 'DESC'){
+                sortAlgo = function (a,b) {
+                    return b.valor.localeCompare(a.valor);
+                }
             }
         }
+
         data.sort(sortAlgo);
 
     }
